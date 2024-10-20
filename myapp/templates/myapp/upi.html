@@ -1,0 +1,65 @@
+
+
+{% extends 'myapp/main.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-5 offset-2">
+            <div class="card border-warning mb-3 me-1 mt-5 shadow-lg" style="min-width: 50rem;">
+                <div class="card-header bg-transparent border-warning" style="font-weight:600;"> Amount transfer</div>
+                <div class="card-body text-dark">
+                    <h2 class='text-center'>Please enter your amount you want to transfer</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group mt-5">
+                        <ul class="list-unstyled">
+                            <li><h6>Amount transferred from account name:{{customer.name}}</h6></li>  
+                            <li>Account-number:{{customer.account.account_number}}</li>
+                        </ul>
+                        <label for="accounts">select from which account you want to transfer money</label>
+                        <select id="account_type_from" name="type_from" class="form-control mt-2">
+                            <option value="current">current</option>
+                            <option value="savings">savings</option>
+                        </select>
+                    <br>
+                        <input type="text" class="form-control" name="account_no" id="account_no" placeholder="Enter account number to transfer money to" required><br>
+                        <label for="accounts">select to which account you want to transfer money</label>
+                        <select id="account_type_to" name="type_to" class="form-control mt-2">
+                            <option value="current">current</option>
+                            <option value="savings">savings</option>
+                        </select>
+                    <br>
+                        <input type="text" class="form-control" name="transact" id="transact" placeholder="Enter amount here" title="Enter appropriate amount" pattern="^[0-9]+(\.[0-9]{1,2})?$"required><br>
+                    </div>
+                    <input class="btn btn-success" type="submit" value="transfer" style="margin-left:20rem;">
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%if transaction == 'pass' %}
+        <script>
+                alert('amount successfully transferred from {{customer.name}} to {{customer_to.name}}')
+        </script>
+{%elif transaction == 'same' %}
+        <script>
+            alert('invalid mode of transaction')
+        </script>
+{%elif transaction == 'noAccountAvail'%}
+        <script>
+            alert('no such account exists to which transaction is done')
+        </script>
+{%elif transaction == 'failed' %}
+        <script>
+            alert('Transaction failed due to insufficient funds')
+        </script>
+{% endif %}
+
+{%endblock%}
+
+
+
+

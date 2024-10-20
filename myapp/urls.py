@@ -27,4 +27,12 @@ urlpatterns = [
    path('login/',views.loginPage,name="login"),
    path('checkbalance/<str:account_no>/',views.checkBalance,name="checkBalance"),
    path('deposit/<str:account_no>/',views.deposit,name="deposit"),
+   path('upi/<str:account_no>/',views.upi,name="upi"),
+   path('transaction/<str:account_no>/',views.transaction,name="transaction"),
+   path('update/<str:account_no>/',views.update,name="update"),
+   path('delete/<str:account_no>',views.delete,name='delete'),
+   path('billpayments/<str:account_no>',views.bill_payments,name='bill_payments'),
+   path('loan/<str:account_no>',views.loan_given,name='loan'),
+   path('loan_details/<str:account_no>',views.loan_details_table,name='loan_details_table'),
+   path('loan_details/pay_loan/<str:refno>/<str:account_no>',views.pay_loan,name='pay_loan'),
 ]

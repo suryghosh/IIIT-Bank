@@ -1,0 +1,94 @@
+
+
+{% extends 'myapp/main.html' %}
+{%load custom_filters%}
+
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Search bar for filtering transactions -->
+    <div class="row">
+        <div class="col-md-8 offset-3">
+            <input type="text" id="transactionFilter" class="form-control" placeholder="Search transactions..." style="width:21rem;">
+            <br>
+            <!-- The table needs to have an id 'transactionTable' so that it can be accessed by the script -->
+            <table id="transactionTable" class="table table-bordered border-light-dark" style="min-width:42rem;">
+                <thead>
+                    <tr>
+                        <th>Transaction from</th>
+                        <th>Transaction to</th>
+                        <th>Date</th>
+                        <th>Transaction type</th>
+                        <th>Transaction details</th>
+                        <th>Account types</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for i in com_trans %}
+                    {% with accountNumber=i.transaction_from.account_number %}
+                    <tr>
+                        <td>
+                            <h6>{{ map|get_item:accountNumber }}</h6><br>
+                        </td>
+                        <td><h6></h6>
+                            {% if i.transaction_to.account_number %}
+                                {{ map|get_item:i.transaction_to.account_number|default:'Null' }}
+                            {% endif %}
+                        </td>
+                        <td>{{ i.transaction_date }}</td>
+                        {% if i.transaction_type == 'success' %}
+                            <td><span class="badge text-bg-success">{{ i.transaction_type }}</span></td>
+                        {% else %}
+                            <td><span class="badge text-bg-danger">{{ i.transaction_type }}</span></td>
+                        {% endif %}
+                        <td>{{ i.transaction_details }}</td>
+                        <td>{{ i.types }}</td>
+                    </tr>
+                    {% endwith %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for filtering table rows -->
+<script>
+    document.getElementById('transactionFilter').addEventListener('keyup', function() {
+        let filterValue = this.value.toLowerCase();
+        let filterTerms = filterValue.split(" "); // Split the search input by spaces to get multiple terms
+        let rows = document.querySelectorAll('#transactionTable tbody tr');
+    
+        rows.forEach(row => {
+            // Assume the row should be displayed
+            let displayRow = true;
+    
+            // Loop over each search term
+            filterTerms.forEach(term => {
+                let rowText = row.textContent.toLowerCase();
+    
+                // For every term, check if it matches any part of the row content
+                if (rowText.indexOf(term) === -1) {
+                    displayRow = false; // If a term doesn't match, don't display the row
+                }
+            });
+    
+            // Show or hide the row based on whether all terms matched
+            if (displayRow) {
+                row.style.display = ''; // Show the row
+            } else {
+                row.style.display = 'none'; // Hide the row
+            }
+        });
+    });
+    
+</script>
+
+
+
+
+{%endblock%}
+
+
+
+

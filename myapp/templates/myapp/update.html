@@ -1,0 +1,42 @@
+{% extends 'myapp/main.html' %}
+{%block content%}
+<div class="container" style="width:1000px;">
+    <div class="row">
+        <div class="col-8 offset-5">
+            <h2 class='text-center'>please Change your credentials to update your account</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group mt-5">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="{{customer.name}}" title="Enter your name"required><br>
+                    <input type="text" class="form-control" name="phone_no" id="phone_no" pattern='\d{10}'placeholder="{{customer.phone_no}}" title="pls enter 10 digit numebr"><br>
+                    <input type="text" class="form-control" name="Aadhar_no" id="Aadhar_no" pattern="\d{12}" placeholder="{{customer.Aadhar_no}}" title="pls enter 12 digit number"><br>
+                    <label for="branches">select your Bank Branch</label>
+                    <select id="branch" name="branch" class="form-control mt-2">
+                        <option value="" disabled selected>{{ customer.branch_connect.branch_name }}</option> <!-- Placeholder -->
+                        {% for branch in branches %}
+                            <option value="{{ branch.branch_id }}">{{ branch.branch_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <input type="password" class="form-control" name="password" id="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" placeholder="{{customer.password}}" title="have atleast 1 cap,1 small,1 special char and 1 number in your password" required><br>
+                
+                </div>
+                <input class="btn btn-success" type="submit" value="Update" style="margin-left:10rem;">
+            </form>
+        </div>
+</div>
+</div>
+{% if error == 'phone_num' %}
+    <script>
+        alert("Phone number already exists");
+    </script>
+{% elif error == 'aadhar_num' %}
+    <script>
+        alert("Aadhar number already exists");
+    </script>
+{% elif error == 'saved'%}
+    <script>
+        alert("credentials updated successfully");
+    </script>
+{%endif%}
+{%endblock%}
